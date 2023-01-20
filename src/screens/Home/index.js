@@ -15,6 +15,7 @@ import Card from "../../components/Card";
 const Home = ({navigation}) => {
     const [tags,setTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState();
+    const [selectedRecipes, setSelectedRecipes] = useState(recipes);
     const {healthyRecipes} = useContext(HealthyRecipesContext);
     const {recipes} = useContext(RecipesContext);
 
@@ -31,6 +32,17 @@ const Home = ({navigation}) => {
         setTags(tagsList)
      
     }, [recipes]);
+
+    useEffect(() => {
+        if(selectedTags){
+            const filteredRecipes = recipes.filter((recipe)=>{
+                return recipe.tags.some((tag)=>tag.name===selectedTags)
+            })
+            setSelectedRecipes(filteredRecipes)
+        }else{
+            setSelectedRecipes(recipes)
+        }
+    }, [selectedTags]);
    
 
     return (
@@ -47,6 +59,7 @@ const Home = ({navigation}) => {
                 renderItem={({item, index})=>(
                     <RecipeCard
                     style={index===0 ? {marginLeft:10} : {}}
+                    onPress={()=>navigation.navigate('RecipeDetails',{item})}
                     title={item.name}
                     time={item.cooking_time_minutes}
                     image={item.thumbnail_url}
@@ -59,13 +72,14 @@ const Home = ({navigation}) => {
                     
                 <FlatList
                 horizontal
-                data={recipes}
+                data={selectedRecipes}
                 style={{ marginHorizontal: -24 }}
                 keyExtractor = {item => String(item.id)}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item,index }) => (
                     <Card
                     style={index===0 ? {marginLeft:10} : {}}
+                    onPress={()=>navigation.navigate('RecipeDetails',{item})}
                     title={item.name}
                     servings={item.num_servings}
                     image={item.thumbnail_url}

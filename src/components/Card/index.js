@@ -1,10 +1,10 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
-const Card = ({ title, style, image, servings }) => {
+const Card = ({ title, style, image, servings,onPress }) => {
     return (
-        <View style={[styles.container, style]}>
+        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
             <Image style={styles.image} source={{ uri:image}} />
             <Text numberOfLines={3} style={styles.title}>{title}</Text>
             {servings ? (
@@ -15,7 +15,7 @@ const Card = ({ title, style, image, servings }) => {
                
             ) : null}
            
-        </View>
+        </TouchableOpacity>
     );
 };
 
